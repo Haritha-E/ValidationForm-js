@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registration Form</title>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        background-image: url('bg.jpg');
+        background-size: Auto;
+        background-position: center;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+    form {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .btn-submit {
+        width: 100%;
+    }
+    .data-table {
+        width: 100%;
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .data-table th {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        text-align: left;
+    }
+    .data-table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    h2 {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #ca1c64;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <form id="registrationForm">
+        <h2>REGISTRATION FORM</h2>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" placeholder="Enter your name" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="rollnumber">Roll Number:</label>
+            <input type="text" class="form-control" placeholder="Enter your roll number" id="rollnumber" required>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" class="form-control" id="dob" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" placeholder="Enter your mail ID" id="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phonenumber">Phone Number:</label>
+            <input type="tel" class="form-control" placeholder="Enter your number" id="phonenumber" pattern="[0-9]{10}" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea class="form-control" id="address" placeholder="Enter your address" required></textarea>
+        </div>
+        <div class="form-group">
+            <label>Gender:</label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                <label class="form-check-label" for="male">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="female" value="female" required>
+                <label class="form-check-label" for="female">Female</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="programme">Programme:</label>
+            <select class="form-control" id="programme" required>
+                <option value="">Select Programme</option>
+                <option value="BE">BE</option>
+                <option value="BTech">BTech</option>
+            </select>
+        </div>
+        <div class="form-group" id="courseGroup" style="display:none;">
+            <label for="course">Course:</label>
+            <select class="form-control" id="course" required>
+                <option value="">Select Course</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" placeholder="Enter your password" id="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" class="form-control" placeholder="Enter your password again" id="confirmPassword" required>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="agreeTerms">
+                <label class="form-check-label" for="agreeTerms">I agree to all the terms and conditions</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit" disabled>Submit</button>
+    </form>
+    <br>
+    <div class="data-table-container">
+        <h2>Submitted Data:</h2>
+        <table id="submittedDataTable" class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Roll Number</th>
+                    <th>Date of Birth</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Gender</th>
+                    <th>Programme</th>
+                    <th>Course</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function validateEmail(email) {
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
+
+    function validatePhoneNumber(phoneNumber) {
+        var phonePattern = /^\d{10}$/;
+        return phonePattern.test(phoneNumber);
+    }
+
+    function checkPasswordStrength(password) {
+        var hasDigit = /\d/.test(password);
+        var hasCharacter = /[a-zA-Z]/.test(password);
+        var isValidLength = password.length >= 8;
+
+        return hasDigit && hasCharacter && isValidLength;
+    }
+
+    function displayEmailAlert() {
+       
+        var emailInput = document.getElementById('email');
+        var email = emailInput.value;
+
+        if (!validateEmail(email)) {
+            emailInput.classList.add('is-invalid');
+            return false;
+        } else {
+            emailInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function displayPhoneNumberAlert() {
+        var phoneInput = document.getElementById('phonenumber');
+        var phoneNumber = phoneInput.value;
+
+        if (!validatePhoneNumber(phoneNumber)) {
+            phoneInput.classList.add('is-invalid');
+            return false;
+        } else {
+            phoneInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function displayPasswordAlert() {
+        var passwordInput = document.getElementById('password');
+        var password = passwordInput.value;
+
+        if (!checkPasswordStrength(password)) {
+            passwordInput.classList.add('is-invalid');
+            return false;
+        } else {
+            passwordInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function displayPasswordMismatchAlert() {
+        var passwordInput = document.getElementById('password');
+        var confirmPasswordInput = document.getElementById('confirmPassword');
+
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.classList.add('is-invalid');
+            return false;
+        } else {
+            confirmPasswordInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    function displayDOBAlert() {
+        var dobInput = document.getElementById('dob');
+        var dob = dobInput.value;
+
+        if (!dob) {
+            dobInput.classList.add('is-invalid');
+            return false;
+        } else {
+            dobInput.classList.remove('is-invalid');
+            return true;
+        }
+    }
+
+    document.getElementById('email').addEventListener('input', function() {
+        displayEmailAlert();
+    });
+
+    document.getElementById('phonenumber').addEventListener('input', function() {
+        displayPhoneNumberAlert();
+    });
+
+    document.getElementById('password').addEventListener('input', function() {
+        displayPasswordAlert();
+        displayPasswordMismatchAlert();
+    });
+
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        displayPasswordMismatchAlert();
+    });
+
+    document.getElementById('dob').addEventListener('change', function() {
+        displayDOBAlert();
+    });
+
+    document.getElementById('programme').addEventListener('change', function() {
+        var programme = this.value;
+        var courseGroup = document.getElementById('courseGroup');
+        var course = document.getElementById('course');
+
+        courseGroup.style.display = 'none';
+        course.innerHTML = '';
+
+        if (programme === 'BE') {
+            course.innerHTML += '<option value="">Select Course</option>';
+            course.innerHTML += '<option value="CSE">CSE</option>';
+            course.innerHTML += '<option value="ECE">ECE</option>';
+            course.innerHTML += '<option value="EEE">EEE</option>';
+            course.innerHTML += '<option value="Civil">Civil</option>';
+        } else if (programme === 'BTech') {
+            course.innerHTML += '<option value="">Select Course</option>';
+            course.innerHTML += '<option value="IT">IT</option>';
+            course.innerHTML += '<option value="Chemical">Chemical</option>';
+            course.innerHTML += '<option value="Food Tech">Food Tech</option>';
+        }
+        courseGroup.style.display = 'block';
+    });
+
+    document.getElementById('agreeTerms').addEventListener('change', function() {
+        document.querySelector('.btn-submit').disabled = !this.checked;
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var invalidInputs = document.querySelectorAll('.is-invalid');
+        invalidInputs.forEach(function(input) {
+            input.classList.remove('is-invalid');
+        });
+
+        var isFormValid = displayEmailAlert() && displayPhoneNumberAlert() && displayPasswordAlert() && displayPasswordMismatchAlert() && displayDOBAlert();
+
+        if (!isFormValid) {
+            return;
+        }
+
+        var formData = {
+            'Name': document.getElementById('name').value,
+            'Roll Number': document.getElementById('rollnumber').value,
+            'Date of Birth': document.getElementById('dob').value,
+            'Email': document.getElementById('email').value,
+            'Phone Number': document.getElementById('phonenumber').value,
+            'Address': document.getElementById('address').value, // Include address field in formData
+            'Gender': document.querySelector('input[name=gender]:checked').value,
+            'Programme': document.getElementById('programme').value,
+            'Course': document.getElementById('course').value
+        };
+
+        var table = document.getElementById('submittedDataTable').getElementsByTagName('tbody')[0];
+        var row = table.insertRow();
+
+        Object.values(formData).forEach(function(value) {
+            var cell = row.insertCell();
+            cell.textContent = value;
+        });
+
+        document.getElementById('registrationForm').reset();
+    });
+</script>
+</body>
+</html>
